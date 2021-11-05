@@ -1,5 +1,7 @@
 # CPSC 304 Project - Pokémon Storage
 
+Original Project Template from [https://github.com/dashboardphilippines/boilerplate-fullstack](https://github.com/dashboardphilippines/boilerplate-fullstack) (Made by Philly)
+
 # Project Description
 
 Our project looks into Pokémon and the digital storage system utilized within the video games. Using the vast array of Pokémon species and regions requires the efficient storage and access of data. This project will make use of a system capable of storing a trainer’s Pokemon, as well as exploring important and identifying information associated with them.  
