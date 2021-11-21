@@ -14,6 +14,19 @@ const dev = process.env.NODE_ENV !== 'production'
 const nextJSApp = next({ dir: './src/frontend', dev })
 const handle = nextJSApp.getRequestHandler()
 
+app.get('/api/pokemon', (req, res) => {
+  return res.json([
+    {
+      id: 1,
+      name: 'Bulbasaur'
+    },
+    {
+      id: 25,
+      name: 'Pikachu'
+    }
+  ])
+})
+
 nextJSApp.prepare().then(() => {
   app.use((req: any, res: any) => {
     const parsedUrl = parse(req.url, true)
