@@ -16,8 +16,7 @@ nunjucks.configure('templates', {
     host: process.env.MYSQL_HOST,
     user: process.env.MYSQL_USERNAME,
     password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DB,
-    ssl: {}
+    database: process.env.MYSQL_DB
   })
 
   app.locals.database = database
