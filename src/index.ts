@@ -1,39 +1,30 @@
 require('dotenv').config()
-import compression from 'compression'
-import cors from 'cors'
 import express from 'express'
-import next from 'next'
-import { parse } from 'url'
+import mysql from 'mysql2/promise'
+import nunjucks from 'nunjucks'
+import routes from './routes'
 
 const app = express()
-app.set('trust proxy', true)
-app.use(cors())
-app.use(compression())
 
-const dev = process.env.NODE_ENV !== 'production'
-const nextJSApp = next({ dir: './src/frontend', dev })
-const handle = nextJSApp.getRequestHandler()
+nunjucks.configure('templates', {
+  autoescape: true,
+  express: app
+});
 
-app.get('/api/pokemon', (req, res) => {
-  return res.json([
-    {
-      id: 1,
-      name: 'Bulbasaur'
-    },
-    {
-      id: 25,
-      name: 'Pikachu'
-    }
-  ])
-})
-
-nextJSApp.prepare().then(() => {
-  app.use((req: any, res: any) => {
-    const parsedUrl = parse(req.url, true)
-    handle(req, res, parsedUrl)
+(async () => {
+  const database = await mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USERNAME,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DB,
+    ssl: {}
   })
+
+  app.locals.database = database
+
+  app.use(routes)
 
   app.listen(process.env.PORT || 3000, () => {
     console.log(`Server Ready on port ${process.env.PORT || 3000}`)
   })
-})
+})()

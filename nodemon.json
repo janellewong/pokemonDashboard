@@ -1,5 +1,5 @@
 {
   "restartable": "rs",
-  "ignore": [".git", "src/frontend/*"],
-  "ext": "ts graphql"
+  "ignore": [".git"],
+  "ext": "njk ts"
 }
