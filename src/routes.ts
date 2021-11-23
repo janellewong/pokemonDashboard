@@ -1,7 +1,10 @@
 import { Router } from 'express'
 import mysql from 'mysql2/promise'
+import routesInitializers from './routes-initializers'
 
 const router = Router()
+
+router.use('/initialize', routesInitializers)
 
 router.get('/', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
