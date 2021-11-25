@@ -67,14 +67,12 @@ router.get('/moves', async (req, res) => {
 
 router.get('/items', async (req, res) => {
   let val = ''
-  let val2 = ''
   for (let i = 1; i <= 954; i++) {
     try {
       const axiosRes = await axios(`https://pokeapi.co/api/v2/item/${i}/`)
       const data = axiosRes.data
-      if (data.attributes.some(x => x.name === 'holdable')) {
-        val+=`(${i}, "${data.name}", "${data.category.name}"),`
-        val2+=`("${data.name}", "${data.category.name}", "${data.effect_entries[0].short_effect}"),`
+      if (data.attributes.some(x => x.name === 'holdable-active')) {
+        val+=`("${data.name}", "${data.category.name}", "${data.effect_entries[0].short_effect}"),`
         console.log(i, data.name, data.category.name, data.effect_entries[0].short_effect)
       } else {
         throw new Error()
@@ -85,8 +83,7 @@ router.get('/items', async (req, res) => {
     }
   }
   return res.send(
-    'INSERT INTO Item1 (ItemID, Name, Type) VALUES ' + val.replace(/.$/, ';') +
-    'INSERT INTO Item2 (Name, Type, Effect) VALUES ' + val2.replace(/.$/, ';')
+    'INSERT INTO Item (Name, Type, Effect) VALUES ' + val.replace(/.$/, ';')
   )
 })
 
