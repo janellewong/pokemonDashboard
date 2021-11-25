@@ -8,8 +8,33 @@ router.use('/initialize', routesInitializers)
 
 router.get('/', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
-  const [queryData] = await db.query('SELECT * FROM test;')
-  return res.render('index.njk', { items: queryData })
+  const [types] = await db.query(`
+    SELECT * FROM Type
+  `)
+  console.log(req.query)
+  const type = req.query.typeName
+  let pokemons: any = []
+  if (type) {
+    const [queryData] = await db.query(`
+      SELECT Pokemon.Name as nickname, Species.Name as pokemonName, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+      FROM Pokemon
+      JOIN Species ON Pokemon.PokedexID = Species.PokedexID
+      JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
+      WHERE SpeciesHasType.TypeName = "${type}"
+      GROUP BY Pokemon.PokemonID;
+    `)
+    pokemons = queryData
+  } else {
+    const [queryData] = await db.query(`
+      SELECT Pokemon.Name as nickname, Species.Name as pokemonName, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+      FROM Pokemon
+      JOIN Species ON Pokemon.PokedexID = Species.PokedexID
+      JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
+      GROUP BY Pokemon.PokemonID;
+    `)
+    pokemons = queryData
+  }
+  return res.render('index.njk', { items: pokemons, types })
 })
 
 router.get('/filter/gender', async (req, res) => {

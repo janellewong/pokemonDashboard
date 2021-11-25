@@ -1,7 +1,49 @@
 <html>
   <body>
-    {% for item in items %}
-      <p>{{ item.id }} - {{ item.text }}</p>
-    {% endfor %}
+    <form action="/" method="GET">
+      <select name="typeName">
+        <option default value="">(None)</option>
+        {% for type in types %}
+          <option value="{{type.Name}}">{{type.Name}}</option>
+        {% endfor %}
+      </select>
+      <input type="submit" value="Update Table" />
+    </form>
+    <table border="1">
+      <thead>
+        <tr>
+          <td>
+            Nickname
+          </td>
+          <td>
+            Name
+          </td>
+          <td>
+            Level
+          </td>
+          <td>
+            Type
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>
+              {{ item.nickname }}
+            </td>
+            <td>
+              {{ item.pokemonName }}
+            </td>
+            <td>
+              {{ item.level }}
+            </td>
+            <td>
+              {{ item.typeName }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </body>
 </html>
