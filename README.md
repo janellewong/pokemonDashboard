@@ -4,7 +4,7 @@ Original Project Template from [https://github.com/dashboardphilippines/boilerpl
 
 # Project Description
 
-Our project looks into Pokémon and the digital storage system utilized within the video games. Using the vast array of Pokémon species and regions requires the efficient storage and access of data. This project will make use of a system capable of storing a trainer’s Pokemon, as well as exploring important and identifying information associated with them.  
+Our project looks into Pokémon, and attempts to create an application that is similar to the digital storage system utilized within the video games. Using the vast array of Pokémon species and regions requires the efficient storage and access of data. This project will make use of a system capable of storing a trainer’s Pokemon, as well as exploring important and identifying information associated with them.  
 
 
 # Database Specifications

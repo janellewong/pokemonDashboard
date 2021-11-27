@@ -4,8 +4,12 @@
   </head>
 
   <body>
+  <p>Please ensure that all entries are spelt correctly! Names of items, species,
+  moves and locations must be all lowercase with hyphens for spaces</p>
+
+
     <form action="/" method="GET">
-      <select name="typeName">
+      Filter by Type: <select name="typeName">
         <option default value="">(None)</option>
         {% for type in types %}
           <option value="{{type.Name}}">{{type.Name}}</option>
@@ -18,6 +22,9 @@
         <tr>
           <td>
             Nickname
+          </td>
+          <td>
+            ID
           </td>
           <td>
             Name
@@ -37,6 +44,9 @@
               {{ item.nickname }}
             </td>
             <td>
+              {{ item.ID }}
+            </td>
+            <td>
               {{ item.pokemonName }}
             </td>
             <td>
@@ -50,14 +60,90 @@
       </tbody>
     </table>
 
+    <h2>Add a Pokemon</h2>
+      <form method="GET" action="/insert"> <!--refresh page when submitted-->
+
+            Pokemon ID: <input type="text" name="ID"> <br /><br />
+
+            Nickname: <input type="text" name="nickName"> <br /><br />
+
+            Pokedex ID: <input type="text" name="species"> <br /><br />
+
+            Level: <input type="text" name="level"> <br /><br />
+
+            Location: <input type="text" name="location"> <br /><br />
+
+            Region: <input type="text" name="region"> <br /><br />
+
+            Item (Optional) : <input type="text" name="item"> <br /><br />
+
+            Gender:  <select name="gender" id="gender">
+                <option value="genderless">genderless</option>
+                <option value="male">male</option>
+                <option value="female">female</option>
+            </select>
+
+            <input type="submit" value="Add" name="Add"></p>
+        </form>
+
     <h2>Update Pokemon Name</h2>
     <p>If you enter an invalid Pokemon ID, no change will happen</p>
-      <form method="POST" action="updateName"> <!--refresh page when submitted-->
+      <form method="GET" action="updateName"> <!--refresh page when submitted-->
                 <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
                 Pokemon ID: <input type="text" name="insID"> <br /><br />
                 New Nickname: <input type="text" name="insName"> <br /><br />
 
                 <input type="submit" value="Update" name="Update Name"></p>
             </form>
+
+
+    <h2>Max Level Pokemon of Each Type</h2>
+    <p> This table may show duplicate results for Pokemon with secondary types</p>
+
+        <form action="/maxLevel" method="GET">
+          <input type="submit" value="Update Table" />
+        </form>
+
+        <table border="1">
+          <thead>
+            <tr>
+              <td>
+                Nickname
+              </td>
+              <td>
+                ID
+              </td>
+              <td>
+                Name
+              </td>
+              <td>
+                Level
+              </td>
+              <td>
+                Type
+              </td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for max in maxs %}
+              <tr>
+                <td>
+                  {{ max.nickName }}
+                </td>
+                <td>
+                  {{ max.ID }}
+                </td>
+                <td>
+                  {{ max.pokemonName }}
+                </td>
+                <td>
+                  {{ max.level }}
+                </td>
+                <td>
+                  {{ max.typeName }}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
   </body>
 </html>
