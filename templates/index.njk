@@ -1,4 +1,8 @@
 <html>
+  <head>
+          <title>Welcome to your Pokemon Storage!</title>
+  </head>
+
   <body>
     <form action="/" method="GET">
       <select name="typeName">
@@ -45,5 +49,15 @@
         {% endfor %}
       </tbody>
     </table>
+
+    <h2>Update Pokemon Name</h2>
+    <p>If you enter an invalid Pokemon ID, no change will happen</p>
+      <form method="POST" action="updateName"> <!--refresh page when submitted-->
+                <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+                Pokemon ID: <input type="text" name="insID"> <br /><br />
+                New Nickname: <input type="text" name="insName"> <br /><br />
+
+                <input type="submit" value="Update" name="Update Name"></p>
+            </form>
   </body>
 </html>

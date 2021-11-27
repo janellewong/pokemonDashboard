@@ -6,6 +6,7 @@ const router = Router()
 
 router.use('/initialize', routesInitializers)
 
+//filter by type
 router.get('/', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   const [types] = await db.query(`
@@ -59,6 +60,21 @@ router.get('/sort', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   const [queryData] = await db.query('SELECT * FROM Pokemon1 ORDER BY Level ASC;')
   return res.render('index.njk', { items: queryData })
+})
+
+router.get('/updateName', async (req, res) => {
+  const db = req.app.locals.database as mysql.Connection
+  console.log(req.query)
+  const ID = req.query.insID
+  const NewName = req.query.insName
+
+  const [queryData] = await db.query(`
+      UPDATE Pokemon
+      SET Name = NewName
+      WHERE PokemonID = ID
+    `)
+  return res.render('index.njk', { items: queryData })
+
 })
 
 export default router
