@@ -2,10 +2,54 @@
 {% block content %}
   <div class="container-fluid">
     <h1>National Pokédex</h1>
-    <p>Kanto, Johto, Hoenn, Sinnoh</p>
+    <h4>Kanto, Johto, Hoenn, Sinnoh</h4>
+    <h6>Aggregation with Having</h6>
     <div class="row">
       <div class="col-md-3">
-        <h1>wassup</h1>
+        <div class="alert alert-secondary">
+          <b>Executed Query:</b><br />
+          <pre>{{ query }}</pre>
+        </div>
+        <form action="" method="GET">
+          <fieldset>
+            <div class="form-group">
+              <label for="regionSelect" class="form-label mt-4">Select Region</label>
+              <select multiple="" class="form-select" name="regions" id="regionSelect">
+                <option value="Kanto">Kanto</option>
+                <option value="Johto">Johto</option>
+                <option value="Hoenn">Hoenn</option>
+                <option value="Sinnoh">Sinnoh</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="typeSelect" class="form-label mt-4">Select Type</label>
+              <select multiple="" class="form-select" name="types" id="typeSelect">
+                <option value="Bug">Bug</option>
+                <option value="Dark">Dark</option>
+                <option value="Dragon">Dragon</option>
+                <option value="Electric">Electric</option>
+                <option value="Fairy">Fairy</option>
+                <option value="Fighting">Fighting</option>
+                <option value="Fire">Fire</option>
+                <option value="Flying">Flying</option>
+                <option value="Ghost">Ghost</option>
+                <option value="Grass">Grass</option>
+                <option value="Ground">Ground</option>
+                <option value="Ice">Ice</option>
+                <option value="Normal">Normal</option>
+                <option value="Poison">Poison</option>
+                <option value="Psychic">Psychic</option>
+                <option value="Rock">Rock</option>
+                <option value="Steel">Steel</option>
+                <option value="Water">Water</option>
+              </select>
+            </div>
+          </fieldset>
+          <br />
+          <div class="d-grid gap-2">
+            <button class="btn btn-lg btn-danger" type="submit">Filter Pokédex</button>
+          </div>
+        </form>
       </div>
       <div class="col-md-9">
         <table class="table table-hover table-striped">

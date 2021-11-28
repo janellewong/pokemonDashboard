@@ -1,0 +1,93 @@
+{% extends "template.njk" %}
+{% block content %}
+  <div class="container">
+    <h1>Pokémon Battle Assistant</h1>
+    <div>
+      <h4>Average Level per Pokémon Type</h4>
+      <h6>Aggregation with Group By</h6>
+      <div class="alert alert-secondary">
+        <b>Executed Query:</b><br />
+        <pre>{{ typeLevelAggregationQuery }}</pre>
+        <a href="/assistant?typeLevelAggregationQueryRun=true">Run Query</a>
+      </div>
+      {% if typeLevelAggregation %}
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Average Level</th>
+              <th scope="col"># of Pokémon</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in typeLevelAggregation %}
+              <tr style="font-size: 16px; font-weight: bold;">
+                <td>
+                  <a href="/?typeName={{ item.type | capitalize }}"><span class="type-icon type-{{ item.type }}">{{ item.type }}</span></a>
+                </td>
+                <td>{{ item.level }}</td>
+                <td>{{ item.count }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+    <hr />
+    <div>
+      <h4>Max Level Pokemon of Each Type</h4>
+      <h6>Nested Aggregation with Group By</h6>
+      <p>This table may show duplicate results for Pokemon with secondary types</p>
+      <div class="alert alert-secondary">
+        <b>Executed Query:</b><br />
+        <pre>{{ maxLevelPokemonQuery }}</pre>
+        <a href="/assistant?maxLevelPokemonQueryRun=true">Run Query</a>
+      </div>
+      {% if maxLevelPokemon %}
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Type</th>
+              <th scope="col">Pokémon</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in maxLevelPokemon %}
+              <tr>
+                <td>
+                  <a href="/?typeName={{ item.typeName | capitalize }}"><span class="type-icon type-{{ item.typeName }}">{{ item.typeName }}</span></a>
+                </td>
+                <td style="padding: 0px; margin: 0px;">
+                  <div class="d-flex flex-row" style="padding: 0px; margin: 0px;">
+                    <div class="p-2" style="padding: 0px; margin: 0px;">
+                      <img style="max-height: 64px;" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
+                    </div>
+                    <div class="p-2" style="padding: 0px; margin: 0px;">
+                      <b style="font-size: 16px;">{{ item.nickName }}</b><br />
+                      <p>{{ item.pokemonName | capitalize }}<br />Level {{ item.level }}<br />ID: {{ item.ID }}</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endif %}
+    </div>
+    <hr />
+    <div>
+      <h4>Find Moves that All Pokemon Have</h4>
+      <h6>Division</h6>
+      <div class="alert alert-secondary">
+        <b>Executed Query:</b><br />
+        <pre>{{ allMovesQuery }}</pre>
+        <a href="/assistant?allMovesQueryRun=true">Run Query</a>
+      </div>
+      {% if allMoves %}
+        {% for move in allMoves %}
+          {{ move.Name }}<br />
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

@@ -2,191 +2,158 @@
 {% block content %}
   <div class="container-fluid">
     <div class="row">
-      <div class="col-md-3 col-sm-12">
-        <h2>Add a Pokemon</h2>
-        <form method="GET" action="/insert">
-          <!--refresh page when submitted-->
-        {# Pokemon ID: <input type="text" name="ID"><br/><br/> #}
-        Nickname: <input type="text" name="nickName"><br/><br/>
-        Pokemon Species:
-        <select name="species">
-            {% for pokemon in pokemonSpecies %}
-              <option value="{{pokemon.id}}">{{pokemon.name | capitalize}}</option>
-            {% endfor %}
-          </select><br/><br/>
-        Level: <input type="text" name="level"><br/><br/>
-        Location: <input type="text" name="location"><br/><br/>
-        Region: <input type="text" name="region"><br/><br/>
-        Item (Optional) : <input type="text" name="item"><br/><br/>
-        Gender: <select name="gender" id="gender">
-            <option value="genderless">genderless</option>
-            <option value="male">male</option>
-            <option value="female">female</option>
-          </select>
-
-          <input type="submit" value="Add" name="Add"></p>
-      </form>
-
-      <h2>Max Level Pokemon of Each Type</h2>
-      <p> This table may show duplicate results for Pokemon with secondary types</p>
-
-      <h2>Insert Pokemon Moves</h2>
-      <form action="/insertMove" method="GET">
-        Pokemon ID: <input type="text" name="ID">
-        <br/><br/>
-        New Move: <input type="text" name="move">
-        <br/><br/>
-
-        <input type="submit" value="Update"/>
-
-      </form>
-
-      <h2>Find Pokemon with Move</h2>
-
-      <form action="/joinMoves" method="GET">
-        <input type="text" name="move">
-        <br/><br/>
-
-        <input type="submit" value="Find"/>
-
-      </form>
-
-      <table border="1">
-        <thead>
-          <tr>
-            <td>
-              Nickname
-            </td>
-            <td>
-              ID
-            </td>
-
-          </tr>
-        </thead>
-        <tbody>
-          {% for move in moves %}
-            <tr>
-              <td>
-                {{ move.nickName }}
-              </td>
-              <td>
-                {{ move.ID }}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <h2>Find Moves that All Pokemon Have</h2>
-      <form action="/allMoves" method="GET">
-              <input type="submit" value="Find"/>
-            </form>
-        Universal Moves:
-        {% for allMove in allMoves %}
-                        <br></br>
-                        {{ allMove.Name }}
-                  {% endfor %}
-
-      <h2>Max Level Pokemon of Each Type</h2>
-      <p> This table may show duplicate results for Pokemon with secondary types</p>
-
-      <form action="/maxLevel" method="GET">
-        <input type="submit" value="Update Table"/>
-      </form>
-
-      <table border="1">
-        <thead>
-          <tr>
-            <td>
-              Nickname
-            </td>
-            <td>
-              ID
-            </td>
-            <td>
-              Name
-            </td>
-            <td>
-              Level
-            </td>
-            <td>
-              Type
-            </td>
-          </tr>
-        </thead>
-        <tbody>
-          {% for max in maxs %}
-            <tr>
-              <td>
-                {{ max.nickName }}
-              </td>
-              <td>
-                {{ max.ID }}
-              </td>
-              <td>
-                {{ max.pokemonName }}
-              </td>
-              <td>
-                {{ max.level }}
-              </td>
-              <td>
-                {{ max.typeName }}
-              </td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+      <div class="col-md-2 col-sm-12">
+        <h4>Filter Collection</h4>
+        <form action="/" method="GET">
+          <fieldset>
+            <div class="form-group">
+              <label for="filterByTypeSelect" class="form-label mt-1">Filter by Type:</label>
+              <select class="form-select" id="filterByTypeSelect" name="typeName">
+                <option default value="">(None)</option>
+                {% for type in types %}
+                  <option value="{{type.Name}}">{{type.Name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="filterByLevelSelect" class="form-label mt-1">Filter by Level:</label>
+              <select class="form-select" name="sign">
+                <option default value="">(None)</option>
+                <option value=">">> (Greater Than)</option>
+                <option value="<">< (Less Than)</option>
+                <option value=">=">>= (Greater Than or Equal To)</option>
+                <option value="<="><= (Less Than or Equal To)</option>
+                <option value="<>"><> (Not Equals To)</option>
+              </select>
+              <br />
+              <input type="text" class="form-control" name="nlevel" placeholder="Pokémon Level">
+            </div>
+            <div class="form-group">
+              <label for="filterByMoveSelect" class="form-label mt-1">Filter by Move:</label>
+              <select class="form-select" id="filterByMoveSelect" name="moveName">
+                <option default value="">(None)</option>
+                {% for move in moves %}
+                  <option value="{{move.name}}">{{move.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <br />
+            <div class="d-grid gap-2">
+              <button class="btn btn-lg btn-warning" type="submit">Filter Collection</button>
+            </div>
+          </fieldset>
+        </form>
+        <hr />
+        <h4>Add Pokemon Moves</h4>
+        <form action="/insertMove" method="GET">
+          <fieldset>
+            <div class="form-group">
+              <label for="idSelect" class="form-label mt-1">Pokémon ID:</label>
+              <select class="form-select" id="idSelect" name="ID">
+                {% for item in pokemons %}
+                  <option value="{{item.ID}}">{{item.ID}} - {{item.nickname}} ({{ item.pokemonName | capitalize }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="moveSelect" class="form-label mt-1">New Move:</label>
+              <select class="form-select" id="moveSelect" name="move">
+                <option default value="">(None)</option>
+                {% for move in moves %}
+                  <option value="{{move.name}}">{{move.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <br/>
+            <div class="d-grid gap-2">
+              <button class="btn btn-lg btn-warning" type="submit">Add Move</button>
+            </div>
+          </fieldset>
+        </form>
     </div>
 
-    <div class="col-md-9 col-sm-12">
+    <div class="col-md-10 col-sm-12">
       <h2>Pokémon Collection</h2>
-      <p>Please ensure that all entries are spelt correctly! Names of items, species, moves and locations must be all
-        lowercase with hyphens for spaces</p>
-      <form action="/" method="GET">
-        <label>
-          <b>Filter by Type: </b>
-          <select name="typeName">
-            <option default value="">(None)</option>
-            {% for type in types %}
-              <option value="{{type.Name}}">{{type.Name}}</option>
-            {% endfor %}
-          </select>
-        </label>
-
-        <label>
-          <b>Filter by Level: </b>
-          <select name="sign">
-            <option default value="">(None)</option>
-            <option value=">">></option>
-            <option value="<"><</option>
-            <option value=">=">>=</option>
-            <option value="<="><=</option>
-            <option value="<>"><></option>
-          </select>
-          <input type="text" name="nlevel" value="{{ item.level }}">
-
-        </label>
-        <input type="submit" value="Update Table"/>
-      </form>
+      <div class="alert alert-secondary">
+        <b>Executed Query:</b><br />
+        <pre>{{ mainQuery }}</pre>
+      </div>
       <table class="table table-hover table-striped">
         <thead>
           <tr>
             <th scope="col">ID</th>
             <th scope="col">Nickname</th>
             <th scope="col">Level</th>
-            <th scope="col">Pokémon Name</th>
-            <th scope="col">Type</th>
-            <th scope="col">Sprite</th>
-            <th scope="col">Update Pokémon</th>
-            <th scope="col">Delete Pokémon</th>
-
+            <th scope="col">Gender</th>
+            <th scope="col">Moves</th>
+            <th scope="col">Location</th>
+            <th scope="col">Held Item</th>
+            <th scope="col">Species</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {% for item in items %}
-            <tr style="font-size: 16px; font-weight: bold;">
+          <tr>
+            <form method="GET" action="/insert">
+              <td>+</td>
+              <td>
+                <div class="form-group">
+                  <input type="text" class="form-control" name="nickName" placeholder="Nickname">
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <input type="number" min="0" max="100" class="form-control" name="level" placeholder="Level">
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <select class="form-select" name="gender" id="gender">
+                    <option value="genderless">genderless</option>
+                    <option value="male">male</option>
+                    <option value="female">female</option>
+                  </select>
+                </div>
+              </td>
+              <td></td>
+              <td>
+                <div class="form-group">
+                  <select class="form-select" name="location">
+                    {% for location in locations %}
+                      <option value="{{location.name}}">{{location.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <select class="form-select" name="item">
+                    <option default value="">(None)</option>
+                    {% for item in items %}
+                      <option value="{{item.name}}">{{item.name}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="form-group">
+                  <select class="form-select" name="species">
+                    {% for pokemon in pokemonSpecies %}
+                      <option value="{{pokemon.id}}">{{pokemon.name | capitalize}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </td>
+              <td>
+                <div class="btn-group-vertical">
+                  <button class="btn btn-success btn-sm" type="submit">Add</button>
+                </div>
+              </td>
+            </form>
+          </tr>
+          {% for item in pokemons %}
+            <tr>
               <form method="GET" action="updateName">
-                <!--refresh page when submitted-->
                 <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
                 <input type="hidden" name="insID" value="{{ item.ID }}">
                 <td>{{ item.ID }}</td>
@@ -196,50 +163,32 @@
                   </div>
                 </td>
                 <td>{{ item.level }}</td>
-                <td>{{ item.pokemonName | capitalize }}</td>
+                <td>{{ item.gender }}</td>
                 <td>
-                  <a href="/?typeName={{ item.typeName | capitalize }}"><span class="type-icon type-{{ item.typeName }}">{{ item.typeName }}</span></a>
+                  {% for move in item.moves %}
+                    <a href="/removeMove?ID={{ item.ID }}&move={{ move }}" style="color: red; white-space:nowrap;">{{ move }}</a><br />
+                  {% endfor %}
                 </td>
-                <td style="padding: 0px;">
-                  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
+                <td>{{ item.location }}<br />{{ item.region }}</td>
+                <td>{{ item.item }}</td>
+                <td style="padding: 0px; margin: 0px;">
+                  <div class="d-flex flex-row" style="padding: 0px; margin: 0px;">
+                    <div class="p-2" style="padding: 0px; margin: 0px;">
+                      <img style="max-height: 64px;" src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
+                    </div>
+                    <div class="p-2" style="padding: 0px; margin: 0px;">
+                      <b style="font-size: 16px;">{{ item.pokemonName | capitalize }}</b><br />
+                      <a href="/?typeName={{ item.typeName | capitalize }}"><span class="type-icon type-{{ item.typeName }}">{{ item.typeName }}</span></a>
+                    </div>
+                  </div>
                 </td>
                 <td>
-                  <button class="btn btn-warning" type="submit">Update Pokémon</button>
+                  <button class="btn btn-warning btn-sm" type="submit">Update</button>
+                  <a href="/deletion?updateQueryRequest=true&itemID={{ item.ID }}">
+                    <button class="btn btn-danger btn-sm" type="button">Delete</button>
+                  </a>
                 </td>
-
               </form>
-
-              <form method="GET" action="deletion">
-                <td>
-                  <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-                  <input type="hidden" name="itemID" value="{{ item.ID }}">
-                  <button class="btn btn-danger" type="submit">Delete Pokémon</button>
-                <td>
-              </form>
-
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-      <hr />
-      <h1>Pokémon Battle Assistant</h1>
-      <h2>Average Level per Pokémon Type</h2>
-      <table class="table table-hover table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Type</th>
-            <th scope="col">Average Level</th>
-            <th scope="col"># of Pokémon</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in typeLevelAggregation %}
-            <tr style="font-size: 16px; font-weight: bold;">
-              <td>
-                <a href="/?typeName={{ item.type | capitalize }}"><span class="type-icon type-{{ item.type }}">{{ item.type }}</span></a>
-              </td>
-              <td>{{ item.level }}</td>
-              <td>{{ item.count }}</td>
             </tr>
           {% endfor %}
         </tbody>
