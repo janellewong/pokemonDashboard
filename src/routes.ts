@@ -6,7 +6,7 @@ const router = Router()
 
 router.use('/initialize', routesInitializers)
 
-//Join Query + Projection
+//Filter by Type (Projection query)
 router.get('/', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   const [types] = await db.query(`
@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
   return res.render('index.njk', { items: pokemons, types })
 })
 
-//Insert Query
+//Insert Pokemon (Insert query)
 router.get('/insert', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   console.log(req.query)
@@ -86,7 +86,7 @@ router.get('/sort', async (req, res) => {
   return res.render('index.njk', { items: queryData })
 })
 
-//Update Query
+//Update Names (update query)
 router.get('/updateName', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   console.log(req.query)
@@ -102,7 +102,38 @@ router.get('/updateName', async (req, res) => {
 
 })
 
-//Nested Aggregation Query
+
+//Insert Moves
+router.get('/insertMove', async (req, res) => {
+  const db = req.app.locals.database as mysql.Connection
+  console.log(req.query)
+  const ID = req.query.ID
+  const newMove = req.query.move
+
+  await db.query(`
+      INSERT INTO PokemonHasMove
+      VALUES ("${ID}", 1, "${newMove}")
+    `)
+  return res.redirect("/")
+})
+
+//Find Pokemon with specific move (Join query)
+router.get('/joinMoves', async (req, res) => {
+  const db = req.app.locals.database as mysql.Connection
+  console.log(req.query)
+  const move = req.query.move
+
+  const [queryData] = await db.query(`
+      SELECT Pokemon.Name             as nickName,
+             Pokemon.PokemonID        as ID
+      FROM Pokemon
+      JOIN PokemonHasMove ON Pokemon.PokemonID = PokemonHasMove.PokemonID
+      WHERE "${move}" = PokemonHasMove.MoveName
+    `)
+  return res.render('index.njk', { moves: queryData })
+})
+
+//Finds max level of each type (Nested Aggregation Query)
 router.get('/maxLevel', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   console.log(req.query)
