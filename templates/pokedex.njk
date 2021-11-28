@@ -1,0 +1,29 @@
+{% extends "template.njk" %}
+{% block content %}
+  <div class="container">
+    <h1>National Pokédex</h1>
+    <p>Kanto, Johto, Hoenn, Sinnoh</p>
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">Name</th>
+          <th scope="col">Region Dex</th>
+          <th scope="col">Primary Type</th>
+          <th scope="col">Sprite</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for pokemon in species %}
+          <tr>
+            <td>{{ pokemon.id }}</td>
+            <td>{{ pokemon.name }}</td>
+            <td>{{ pokemon.region }}</td>
+            <td>{{ pokemon.type }}</td>
+            <td style="padding: 0px;"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemon.id }}.png"/></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

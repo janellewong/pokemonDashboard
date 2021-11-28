@@ -15,9 +15,10 @@ router.get('/', async (req, res) => {
   console.log(req.query)
   const type = req.query.typeName
   let pokemons: any = []
+  const [pokemonSpecies] = await db.query('SELECT Species.PokedexID as id, Species.Name as name FROM Species;')
   if (type) {
     const [queryData] = await db.query(`
-      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
       FROM Pokemon
       JOIN Species ON Pokemon.PokedexID = Species.PokedexID
       JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
@@ -27,7 +28,7 @@ router.get('/', async (req, res) => {
     pokemons = queryData
   } else {
     const [queryData] = await db.query(`
-      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
       FROM Pokemon
       JOIN Species ON Pokemon.PokedexID = Species.PokedexID
       JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
@@ -35,7 +36,19 @@ router.get('/', async (req, res) => {
     `)
     pokemons = queryData
   }
-  return res.render('index.njk', { items: pokemons, types })
+  return res.render('index.njk', { items: pokemons, types, navbar: true, pokemonSpecies })
+})
+
+//Join Query + Projection
+router.get('/pokedex', async (req, res) => {
+  const db = req.app.locals.database as mysql.Connection
+  const [queryData] = await db.query(`
+    SELECT Species.PokedexID as id, Species.Name as name, Species.RegionName as region,  SpeciesHasType.TypeName as type
+    FROM Species
+    JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
+    GROUP BY id;
+  `)
+  return res.render('pokedex.njk', { species: queryData })
 })
 
 //Insert Query
@@ -69,7 +82,7 @@ router.get('/insert', async (req, res) => {
     `)
     }
   }
-  return res.redirect("/")
+  return res.redirect('/')
 })
 
 //Delete Query
@@ -98,7 +111,7 @@ router.get('/updateName', async (req, res) => {
       SET Name = "${NewName}"
       WHERE PokemonID = "${ID}"
     `)
-  return res.redirect("/")
+  return res.redirect('/')
 
 })
 
@@ -120,7 +133,6 @@ router.get('/maxLevel', async (req, res) => {
   `)
   return res.render('index.njk', { maxs: queryData })
 })
-
 
 
 export default router
