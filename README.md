@@ -25,3 +25,6 @@ Type Match-Ups CSS from: [https://pokemondb.net/type](https://pokemondb.net/type
 
 - Pokemon no longer needs to have moves, so that an insertion of moves with every pokemon is no longer necessary (In this world, Pokemon can just be pets that don’t have to have combative abilities!)
 
+- We initially wanted to go for using a tech stack that involved the use of REST APIs and React (through Next.JS) since the majority of the group is also currently taking CPSC 310. Though after doing Lab 7 on PHP, we quickly realized that adding React to our project would add a lot of unnecessary overhead, which would steer the direction of the project towards a CPSC 310 project rather than a CPSC 304 project. This is why we revamped our stack to a Server-Side Rendered project (where the HTML gets generated on the Node.JS side) similar to that of the PHP project from Lab 7. By reducing tech overhead, it allows our team to build code faster in a fraction of time.
+ 
+
