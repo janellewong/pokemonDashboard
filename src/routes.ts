@@ -56,7 +56,7 @@ router.get('/insert', async (req, res) => {
       FROM Location
       WHERE Location.Name = "${location}" and Location.RegionName = "${region}"
     `)
-  if(queryData){
+  if( queryData[0] ){
     if(item) {
       await db.query(`
       INSERT INTO Pokemon
