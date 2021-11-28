@@ -77,6 +77,16 @@
         </tbody>
       </table>
 
+      <h2>Find Moves that All Pokemon Have</h2>
+      <form action="/allMoves" method="GET">
+              <input type="submit" value="Find"/>
+            </form>
+        Universal Moves:
+        {% for allMove in allMoves %}
+                        <br></br>
+                        {{ allMove.Name }}
+                  {% endfor %}
+
       <h2>Max Level Pokemon of Each Type</h2>
       <p> This table may show duplicate results for Pokemon with secondary types</p>
 

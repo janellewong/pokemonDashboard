@@ -99,6 +99,7 @@ router.get('/insert', async (req, res) => {
     `)
     }
   }
+
   return res.redirect('/')
 })
 
@@ -166,6 +167,24 @@ router.get('/joinMoves', async (req, res) => {
       WHERE "${move}" = PokemonHasMove.MoveName
     `)
   return res.render('index.njk', { moves: queryData })
+})
+
+//Find moves that all Pokemon have (Division query)
+router.get('/allMoves', async (req, res) => {
+  const db = req.app.locals.database as mysql.Connection
+  console.log(req.query)
+  const [queryData] = await db.query(`
+    SELECT Move.Name
+    FROM   Move
+    WHERE NOT EXISTS (SELECT  Pokemon.name
+                      FROM  Pokemon
+                      WHERE  NOT EXISTS (SELECT  PHM.PokemonID
+                                         FROM  PokemonHasMove PHM
+                                         WHERE  Move.Name = PHM.MoveName
+                                           AND Pokemon.PokemonID = PHM.PokemonID))
+
+  `)
+  return res.render('index.njk', { allMoves: queryData })
 })
 
 //Finds max level of each type (Nested Aggregation Query)
