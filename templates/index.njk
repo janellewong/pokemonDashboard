@@ -1,19 +1,147 @@
 {% extends "template.njk" %}
 {% block content %}
-  <div class="container">
-    <h2>Pokémon Collection</h2>
-    <p>Please ensure that all entries are spelt correctly! Names of items, species,
-    moves and locations must be all lowercase with hyphens for spaces</p>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3 col-sm-12">
+        <h2>Add a Pokemon</h2>
+        <form method="GET" action="/insert">
+          <!--refresh page when submitted-->
+        Pokemon ID: <input type="text" name="ID"><br/><br/>
+        Nickname: <input type="text" name="nickName"><br/><br/>
+        Pokemon Species:
+        <select name="species">
+            {% for pokemon in pokemonSpecies %}
+              <option value="{{pokemon.id}}">{{pokemon.name}}</option>
+            {% endfor %}
+          </select><br/><br/>
+        Level: <input type="text" name="level"><br/><br/>
+        Location: <input type="text" name="location"><br/><br/>
+        Region: <input type="text" name="region"><br/><br/>
+        Item (Optional) : <input type="text" name="item"><br/><br/>
+        Gender: <select name="gender" id="gender">
+            <option value="genderless">genderless</option>
+            <option value="male">male</option>
+            <option value="female">female</option>
+          </select>
+
+          <input type="submit" value="Add" name="Add"></p>
+      </form>
+
+      <h2>Max Level Pokemon of Each Type</h2>
+      <p> This table may show duplicate results for Pokemon with secondary types</p>
+
+      <h2>Insert Pokemon Moves</h2>
+      <form action="/insertMove" method="GET">
+        Pokemon ID: <input type="text" name="ID">
+        <br/><br/>
+        New Move: <input type="text" name="move">
+        <br/><br/>
+
+        <input type="submit" value="Update"/>
+
+      </form>
+
+      <h2>Find Pokemon with Move</h2>
+
+      <form action="/joinMoves" method="GET">
+        <input type="text" name="move">
+        <br/><br/>
+
+        <input type="submit" value="Find"/>
+
+      </form>
+
+      <table border="1">
+        <thead>
+          <tr>
+            <td>
+              Nickname
+            </td>
+            <td>
+              ID
+            </td>
+
+          </tr>
+        </thead>
+        <tbody>
+          {% for move in moves %}
+            <tr>
+              <td>
+                {{ move.nickName }}
+              </td>
+              <td>
+                {{ move.ID }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <h2>Max Level Pokemon of Each Type</h2>
+      <p> This table may show duplicate results for Pokemon with secondary types</p>
+
+      <form action="/maxLevel" method="GET">
+        <input type="submit" value="Update Table"/>
+      </form>
+
+      <table border="1">
+        <thead>
+          <tr>
+            <td>
+              Nickname
+            </td>
+            <td>
+              ID
+            </td>
+            <td>
+              Name
+            </td>
+            <td>
+              Level
+            </td>
+            <td>
+              Type
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for max in maxs %}
+            <tr>
+              <td>
+                {{ max.nickName }}
+              </td>
+              <td>
+                {{ max.ID }}
+              </td>
+              <td>
+                {{ max.pokemonName }}
+              </td>
+              <td>
+                {{ max.level }}
+              </td>
+              <td>
+                {{ max.typeName }}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-9 col-sm-12">
+      <h2>Pokémon Collection</h2>
+      <p>Please ensure that all entries are spelt correctly! Names of items, species, moves and locations must be all
+        lowercase with hyphens for spaces</p>
       <form action="/" method="GET">
         <label>
-          <b>Filter by Type: </b><select name="typeName">
+          <b>Filter by Type: </b>
+          <select name="typeName">
             <option default value="">(None)</option>
             {% for type in types %}
               <option value="{{type.Name}}">{{type.Name}}</option>
             {% endfor %}
           </select>
         </label>
-        <input type="submit" value="Update Table" />
+        <input type="submit" value="Update Table"/>
       </form>
       <table class="table table-hover table-striped">
         <thead>
@@ -30,7 +158,8 @@
         <tbody>
           {% for item in items %}
             <tr style="font-size: 16px; font-weight: bold;">
-              <form method="GET" action="updateName"> <!--refresh page when submitted-->
+              <form method="GET" action="updateName">
+                <!--refresh page when submitted-->
                 <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
                 <input type="hidden" name="insID" value="{{ item.ID }}">
                 <td>{{ item.ID }}</td>
@@ -42,7 +171,9 @@
                 <td>{{ item.level }}</td>
                 <td>{{ item.pokemonName }}</td>
                 <td>{{ item.typeName }}</td>
-                <td style="padding: 0px;"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/></td>
+                <td style="padding: 0px;"><img
+                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
+                </td>
                 <td>
                   <button class="btn btn-warning" type="submit">Update Pokémon</button>
                 </td>
@@ -51,136 +182,7 @@
           {% endfor %}
         </tbody>
       </table>
-
-      <h2>Add a Pokemon</h2>
-        <form method="GET" action="/insert"> <!--refresh page when submitted-->
-
-              Pokemon ID: <input type="text" name="ID"><br /><br />
-
-              Nickname: <input type="text" name="nickName"> <br /><br />
-
-              Pokemon Species:
-              <select name="species">
-                {% for pokemon in pokemonSpecies %}
-                  <option value="{{pokemon.id}}">{{pokemon.name}}</option>
-                {% endfor %}
-              </select>
-              <br /><br />
-
-              Level: <input type="text" name="level"> <br /><br />
-
-              Location: <input type="text" name="location"> <br /><br />
-
-              Region: <input type="text" name="region"> <br /><br />
-
-              Item (Optional) : <input type="text" name="item"> <br /><br />
-
-              Gender:  <select name="gender" id="gender">
-                  <option value="genderless">genderless</option>
-                  <option value="male">male</option>
-                  <option value="female">female</option>
-              </select>
-
-              <input type="submit" value="Add" name="Add"></p>
-          </form>
-
-      <h2>Max Level Pokemon of Each Type</h2>
-      <p> This table may show duplicate results for Pokemon with secondary types</p>
-
-	<h2>Insert Pokemon Moves</h2>
-    <form action="/insertMove" method="GET">
-     Pokemon ID: <input type="text" name="ID"> <br /><br />
-     New Move: <input type="text" name="move"> <br /><br />
-
-      <input type="submit" value="Update" />
-
-    </form>
-
-        <h2>Find Pokemon with Move</h2>
-
-        <form action="/joinMoves" method="GET">
-          <input type="text" name="move"> <br /><br />
-
-
-          <input type="submit" value="Find" />
-
-        </form>
-
-    	 <table border="1">
-              <thead>
-                <tr>
-                  <td>
-                    Nickname
-                  </td>
-                  <td>
-                    ID
-                  </td>
-
-                </tr>
-              </thead>
-              <tbody>
-                {% for move in moves %}
-                  <tr>
-                    <td>
-                      {{ move.nickName }}
-                    </td>
-                    <td>
-                      {{ move.ID }}
-                    </td>
-                  </tr>
-                {% endfor %}
-              </tbody>
-          </table>
-
-
-    <h2>Max Level Pokemon of Each Type</h2>
-    <p> This table may show duplicate results for Pokemon with secondary types</p>
-
-          <form action="/maxLevel" method="GET">
-            <input type="submit" value="Update Table" />
-          </form>
-
-          <table border="1">
-            <thead>
-              <tr>
-                <td>
-                  Nickname
-                </td>
-                <td>
-                  ID
-                </td>
-                <td>
-                  Name
-                </td>
-                <td>
-                  Level
-                </td>
-                <td>
-                  Type
-                </td>
-              </tr>
-            </thead>
-            <tbody>
-              {% for max in maxs %}
-                <tr>
-                  <td>
-                    {{ max.nickName }}
-                  </td>
-                  <td>
-                    {{ max.ID }}
-                  </td>
-                  <td>
-                    {{ max.pokemonName }}
-                  </td>
-                  <td>
-                    {{ max.level }}
-                  </td>
-                  <td>
-                    {{ max.typeName }}
-                  </td>
-                </tr>
-              {% endfor %}
-            </tbody>
-          </table>
     </div>
+  </div>
+</div>
 {% endblock %}
