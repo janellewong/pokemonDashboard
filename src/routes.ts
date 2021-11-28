@@ -63,7 +63,7 @@ router.get('/pokedex', async (req, res) => {
 router.get('/insert', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   console.log(req.query)
-  const ID = req.query.ID
+  // const ID = req.query.ID
   const nickName = req.query.nickName
   const species = req.query.species
   const level = req.query.level
@@ -80,13 +80,13 @@ router.get('/insert', async (req, res) => {
   if( queryData[0] ){
     if(item) {
       await db.query(`
-      INSERT INTO Pokemon
-      VALUES ("${ID}", "${nickName}", "${gender}", "${level}", "${item}", 1, "${species}", "${location}", "${region}" );
+      INSERT INTO Pokemon (Name, Gender, Level, Item, TrainerID, PokedexID, LocationName, RegionName)
+      VALUES ("${nickName}", "${gender}", "${level}", "${item}", 1, "${species}", "${location}", "${region}" );
     `)
     } else {
       await db.query(`
-      INSERT INTO Pokemon
-      VALUES ("${ID}", "${nickName}", "${gender}", "${level}", NULL, 1, "${species}", "${location}", "${region}" );
+      INSERT INTO Pokemon (Name, Gender, Level, Item, TrainerID, PokedexID, LocationName, RegionName)
+      VALUES ("${nickName}", "${gender}", "${level}", NULL, 1, "${species}", "${location}", "${region}" );
     `)
     }
   }
