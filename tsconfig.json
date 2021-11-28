@@ -11,6 +11,5 @@
     "isolatedModules": false,
     "esModuleInterop": true,
     "baseUrl": "./src"
-  },
-  "exclude": ["src/frontend"]
+  }
 }
