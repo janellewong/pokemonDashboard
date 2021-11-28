@@ -152,15 +152,16 @@
             {% endfor %}
           </select>
         </label>
+
         <label>
           <b>Filter by Level: </b>
           <select name="sign">
             <option default value="">(None)</option>
-            <option value="{{greater-than}}">></option>
-            <option value="{{less-than}}"><</option>
-            <option value="{{greater-than-equal}}">>=</option>
-            <option value="{{less-than-equal}}"><=</option>
-
+            <option value=">">></option>
+            <option value="<"><</option>
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+            <option value="<>"><></option>
           </select>
           <input type="text" name="nlevel" value="{{ item.level }}">
 

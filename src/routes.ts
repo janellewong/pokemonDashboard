@@ -6,7 +6,18 @@ const router = Router()
 
 router.use('/initialize', routesInitializers)
 
-//Filter by Type (Projection query)
+function generateWhereClause(type, level, sign) {
+  let str = [];
+  if (type) {
+    str.push(`SpeciesHasType.TypeName = "${type}"`)
+  }
+  if (level && sign) {
+    str.push(`Pokemon.Level ${sign} "${level}"`)
+  }
+  return str
+}
+
+//Filter by Type (Projection query & selection query)
 router.get('/', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
   const [types] = await db.query(`
@@ -16,6 +27,7 @@ router.get('/', async (req, res) => {
   const type = req.query.typeName
   const level = req.query.nlevel
   const sign = req.query.sign
+  console.log(sign)
   let pokemons: any = []
   const [pokemonSpecies] = await db.query('SELECT Species.PokedexID as id, Species.Name as name FROM Species;')
   const [typeLevelAggregation] = await db.query(`
@@ -26,22 +38,25 @@ router.get('/', async (req, res) => {
     GROUP BY SpeciesHasType.TypeName
     ORDER BY level DESC;
   `)
-  if (type) {
+  if (Object.keys(req.query).length > 0) {
+    console.log(`
+    SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+    FROM Pokemon
+    JOIN Species ON Pokemon.PokedexID = Species.PokedexID
+    JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
+    WHERE ${generateWhereClause(type, level, sign).join(" AND ")}
+    GROUP BY Pokemon.PokemonID;
+  `)
     const [queryData] = await db.query(`
       SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
       FROM Pokemon
       JOIN Species ON Pokemon.PokedexID = Species.PokedexID
       JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
-      WHERE SpeciesHasType.TypeName = "${type}"
+      WHERE ${generateWhereClause(type, level, sign).join(" AND ")}
       GROUP BY Pokemon.PokemonID;
     `)
-  } else if (level && sign) {
-    const [queryData] = await db.query(`
-      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
-      FROM Pokemon
-      WHERE Species.Level ${sign} "${level}"
-      GROUP BY Pokemon.PokemonID;
-    `)
+    pokemons = queryData
+
   } else {
     const [queryData] = await db.query(`
       SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
