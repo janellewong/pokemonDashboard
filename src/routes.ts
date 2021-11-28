@@ -14,6 +14,8 @@ router.get('/', async (req, res) => {
   `)
   console.log(req.query)
   const type = req.query.typeName
+  const level = req.query.nlevel
+  const sign = req.query.sign
   let pokemons: any = []
   const [pokemonSpecies] = await db.query('SELECT Species.PokedexID as id, Species.Name as name FROM Species;')
   const [typeLevelAggregation] = await db.query(`
@@ -33,7 +35,13 @@ router.get('/', async (req, res) => {
       WHERE SpeciesHasType.TypeName = "${type}"
       GROUP BY Pokemon.PokemonID;
     `)
-    pokemons = queryData
+  } else if (level && sign) {
+    const [queryData] = await db.query(`
+      SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
+      FROM Pokemon
+      WHERE Species.Level ${sign} "${level}"
+      GROUP BY Pokemon.PokemonID;
+    `)
   } else {
     const [queryData] = await db.query(`
       SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
@@ -46,6 +54,7 @@ router.get('/', async (req, res) => {
   }
   return res.render('index.njk', { items: pokemons, types, navbar: true, pokemonSpecies, typeLevelAggregation })
 })
+
 
 //Join Query + Projection
 router.get('/pokedex', async (req, res) => {
@@ -62,7 +71,6 @@ router.get('/pokedex', async (req, res) => {
 //Insert Pokemon (Insert query)
 router.get('/insert', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
-  console.log(req.query)
   const ID = req.query.ID
   const nickName = req.query.nickName
   const species = req.query.species
@@ -95,22 +103,27 @@ router.get('/insert', async (req, res) => {
 
 //Delete Query
 router.get('/deletion', async (req, res) => {
+  console.log(req.query)
   const db = req.app.locals.database as mysql.Connection
-  const [queryData] = await db.query('DELETE FROM Pokemon1 WHERE Name = "Pikachu";')
-  return res.render('index.njk', { items: queryData })
+  const ID = req.query.itemID
+  const [queryData] = await db.query(`
+      DELETE 
+      FROM Pokemon 
+      WHERE (PokemonID = "${ID}" AND TrainerID = "1")
+    `)
+    return res.redirect('/')
 })
 
 //Sort Query
-router.get('/sort', async (req, res) => {
-  const db = req.app.locals.database as mysql.Connection
-  const [queryData] = await db.query('SELECT * FROM Pokemon1 ORDER BY Level ASC;')
-  return res.render('index.njk', { items: queryData })
-})
+// router.get('/sort', async (req, res) => {
+//   const db = req.app.locals.database as mysql.Connection
+//   const [queryData] = await db.query('SELECT * FROM Pokemon1 ORDER BY Level ASC;')
+//   return res.render('index.njk', { items: queryData })
+// })
 
 //Update Names (update query)
 router.get('/updateName', async (req, res) => {
   const db = req.app.locals.database as mysql.Connection
-  console.log(req.query)
   const ID = req.query.insID
   const NewName = req.query.insName
 
