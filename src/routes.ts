@@ -16,6 +16,14 @@ router.get('/', async (req, res) => {
   const type = req.query.typeName
   let pokemons: any = []
   const [pokemonSpecies] = await db.query('SELECT Species.PokedexID as id, Species.Name as name FROM Species;')
+  const [typeLevelAggregation] = await db.query(`
+    SELECT SpeciesHasType.TypeName as type, ROUND(AVG(Pokemon.Level), 0) as level, COUNT(Pokemon.PokedexID) as count
+    FROM Pokemon
+    JOIN Species ON Pokemon.PokedexID = Species.PokedexID
+    JOIN SpeciesHasType ON SpeciesHasType.PokedexID = Species.PokedexID
+    GROUP BY SpeciesHasType.TypeName
+    ORDER BY level DESC;
+  `)
   if (type) {
     const [queryData] = await db.query(`
       SELECT Pokemon.Name as nickname, Pokemon.PokemonID as ID, Species.Name as pokemonName, Species.PokedexID as PokedexID, Pokemon.Level as level, SpeciesHasType.TypeName as typeName
@@ -36,7 +44,7 @@ router.get('/', async (req, res) => {
     `)
     pokemons = queryData
   }
-  return res.render('index.njk', { items: pokemons, types, navbar: true, pokemonSpecies })
+  return res.render('index.njk', { items: pokemons, types, navbar: true, pokemonSpecies, typeLevelAggregation })
 })
 
 //Join Query + Projection
@@ -127,7 +135,7 @@ router.get('/insertMove', async (req, res) => {
       INSERT INTO PokemonHasMove
       VALUES ("${ID}", 1, "${newMove}")
     `)
-  return res.redirect("/")
+  return res.redirect('/')
 })
 
 //Find Pokemon with specific move (Join query)

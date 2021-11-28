@@ -184,6 +184,29 @@
           {% endfor %}
         </tbody>
       </table>
+      <hr />
+      <h1>Pokémon Battle Assistant</h1>
+      <h2>Average Level per Pokémon Type</h2>
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Average Level</th>
+            <th scope="col"># of Pokémon</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in typeLevelAggregation %}
+            <tr style="font-size: 16px; font-weight: bold;">
+              <td>
+                <a href="/?typeName={{ item.type | capitalize }}"><span class="type-icon type-{{ item.type }}">{{ item.type }}</span></a>
+              </td>
+              <td>{{ item.level }}</td>
+              <td>{{ item.count }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
