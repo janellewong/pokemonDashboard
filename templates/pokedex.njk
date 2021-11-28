@@ -1,29 +1,36 @@
 {% extends "template.njk" %}
 {% block content %}
-  <div class="container">
+  <div class="container-fluid">
     <h1>National Pokédex</h1>
     <p>Kanto, Johto, Hoenn, Sinnoh</p>
-    <table class="table table-hover table-striped">
-      <thead>
-        <tr>
-          <th scope="col">ID</th>
-          <th scope="col">Name</th>
-          <th scope="col">Region Dex</th>
-          <th scope="col">Primary Type</th>
-          <th scope="col">Sprite</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for pokemon in species %}
-          <tr>
-            <td>{{ pokemon.id }}</td>
-            <td>{{ pokemon.name | capitalize }}</td>
-            <td>{{ pokemon.region }}</td>
-            <td><span class="type-icon type-{{ pokemon.type }}">{{ pokemon.type }}</span></td>
-            <td style="padding: 0px;"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemon.id }}.png"/></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="row">
+      <div class="col-md-3">
+        <h1>wassup</h1>
+      </div>
+      <div class="col-md-9">
+        <table class="table table-hover table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Region Dex</th>
+              <th scope="col">Primary Type</th>
+              <th scope="col">Sprite</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for pokemon in species %}
+              <tr>
+                <td>{{ pokemon.id }}</td>
+                <td>{{ pokemon.name | capitalize }}</td>
+                <td>{{ pokemon.region }}</td>
+                <td><span class="type-icon type-{{ pokemon.type }}">{{ pokemon.type }}</span></td>
+                <td style="padding: 0px;"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemon.id }}.png"/></td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 {% endblock %}
