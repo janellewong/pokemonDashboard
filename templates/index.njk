@@ -87,6 +87,55 @@
       <h2>Max Level Pokemon of Each Type</h2>
       <p> This table may show duplicate results for Pokemon with secondary types</p>
 
+	<h2>Insert Pokemon Moves</h2>
+    <form action="/insertMove" method="GET">
+     Pokemon ID: <input type="text" name="ID"> <br /><br />
+     New Move: <input type="text" name="move"> <br /><br />
+
+      <input type="submit" value="Update" />
+
+    </form>
+
+        <h2>Find Pokemon with Move</h2>
+
+        <form action="/joinMoves" method="GET">
+          <input type="text" name="move"> <br /><br />
+
+
+          <input type="submit" value="Find" />
+
+        </form>
+
+    	 <table border="1">
+              <thead>
+                <tr>
+                  <td>
+                    Nickname
+                  </td>
+                  <td>
+                    ID
+                  </td>
+
+                </tr>
+              </thead>
+              <tbody>
+                {% for move in moves %}
+                  <tr>
+                    <td>
+                      {{ move.nickName }}
+                    </td>
+                    <td>
+                      {{ move.ID }}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+
+
+    <h2>Max Level Pokemon of Each Type</h2>
+    <p> This table may show duplicate results for Pokemon with secondary types</p>
+
           <form action="/maxLevel" method="GET">
             <input type="submit" value="Update Table" />
           </form>
