@@ -17,7 +17,7 @@
         {% for pokemon in species %}
           <tr>
             <td>{{ pokemon.id }}</td>
-            <td>{{ pokemon.name }}</td>
+            <td>{{ pokemon.name | capitalize }}</td>
             <td>{{ pokemon.region }}</td>
             <td><span class="type-icon type-{{ pokemon.type }}">{{ pokemon.type }}</span></td>
             <td style="padding: 0px;"><img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemon.id }}.png"/></td>
