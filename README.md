@@ -15,3 +15,13 @@ The main user of our database will be the Pokémon trainer, who uses the system 
 
 ## Additional Credits:
 Type Match-Ups CSS from: [https://pokemondb.net/type](https://pokemondb.net/type)
+
+## Changes made from previous Milestones
+- Reverted normalized tables from milestone 2 to original tables (Item and Pokemon), as the attributes we added to be able to normalize them did not make much sense (Rachel gave us the OK for this on Piazza!)
+
+- Removed some attributes from ‘Pokemon’ to make insertions simpler
+
+- Changed some of the queries we listed in Milestone 3 after understanding the criteria better
+
+- Pokemon no longer needs to have moves, so that an insertion of moves with every pokemon is no longer necessary (In this world, Pokemon can just be pets that don’t have to have combative abilities!)
+
