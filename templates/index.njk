@@ -170,9 +170,11 @@
                 </td>
                 <td>{{ item.level }}</td>
                 <td>{{ item.pokemonName | capitalize }}</td>
-                <td><span class="type-icon type-{{ item.typeName }}">{{ item.typeName }}</span></td>
-                <td style="padding: 0px;"><img
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
+                <td>
+                  <a href="/?typeName={{ item.typeName | capitalize }}"><span class="type-icon type-{{ item.typeName }}">{{ item.typeName }}</span></a>
+                </td>
+                <td style="padding: 0px;">
+                  <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ item.PokedexID }}.png"/>
                 </td>
                 <td>
                   <button class="btn btn-warning" type="submit">Update Pokémon</button>
